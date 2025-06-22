@@ -1,0 +1,161 @@
+
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Scopri la Località Misteriosa</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #f0f2f5;
+      margin: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .quiz-box {
+      background: white;
+      padding: 25px;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 550px;
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 1.5em;
+      color: #333;
+    }
+
+    .question {
+      font-size: 1.1em;
+      margin: 15px 0 10px;
+    }
+
+    .answers button, .restart-btn {
+      display: block;
+      width: 100%;
+      margin: 5px 0;
+      padding: 10px;
+      background-color: #e0e7ff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background 0.2s;
+      font-size: 1em;
+    }
+
+    .answers button:hover, .restart-btn:hover {
+      background-color: #c7d2fe;
+    }
+
+    .result {
+      margin-top: 20px;
+      text-align: center;
+      font-weight: bold;
+      font-size: 1.2em;
+    }
+
+    .image {
+      width: 100%;
+      height: auto;
+      border-radius: 8px;
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="quiz-box">
+    <h1>Scopri la località misteriosa</h1>
+    <div id="quiz"></div>
+    <div class="result" id="result"></div>
+  </div>
+
+  <script>
+    const quizData = [
+      {
+        question: "La località è famosa per le sue case…",
+        image: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/Colmar_-_Maison_des_T%C3%AAtes.jpg/640px-Colmar_-_Maison_des_T%C3%AAtes.jpg",
+        options: ["Scavate nella roccia", "In pietra lavica", "A graticcio"],
+        answer: 2
+      },
+      {
+        question: "In questa località scorre un romantico canale nel quartiere chiamato…",
+        image: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d8/Colmar_Petite_Venise.jpg/640px-Colmar_Petite_Venise.jpg",
+        options: ["Piccola Venezia", "Marina Piccola", "Borgo dei Mulini"],
+        answer: 0
+      },
+      {
+        question: "Qui è nato l’autore della Statua della Libertà. Chi è?",
+        image: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/74/Bartholdi_statue_Colmar.jpg/640px-Bartholdi_statue_Colmar.jpg",
+        options: ["Gustave Eiffel", "Frédéric Auguste Bartholdi", "Eugène Viollet-le-Duc"],
+        answer: 1
+      },
+      {
+        question: "Una specialità tipica di questa zona è…",
+        image: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Flammkuchen_-_tarte_flamb%C3%A9e_Alsacienne.jpg/640px-Flammkuchen_-_tarte_flamb%C3%A9e_Alsacienne.jpg",
+        options: ["Tarte flambée", "Raclette", "Quiche Lorraine"],
+        answer: 0
+      }
+    ];
+
+    const quizContainer = document.getElementById("quiz");
+    const resultContainer = document.getElementById("result");
+    let currentQuestion = 0;
+    let correctAnswers = 0;
+
+    function loadQuestion() {
+      const q = quizData[currentQuestion];
+      quizContainer.innerHTML = `
+        <img src="${q.image}" alt="immagine" class="image">
+        <div class="question">${q.question}</div>
+        <div class="answers">
+          ${q.options.map((opt, i) => `<button onclick="selectAnswer(${i})">${opt}</button>`).join('')}
+        </div>
+      `;
+      resultContainer.innerHTML = '';
+    }
+
+    function selectAnswer(selected) {
+      const correct = quizData[currentQuestion].answer;
+      if (selected === correct) correctAnswers++;
+      currentQuestion++;
+      if (currentQuestion < quizData.length) {
+        loadQuestion();
+      } else {
+        showResult();
+      }
+    }
+
+    function showResult() {
+      quizContainer.innerHTML = '';
+      if (correctAnswers === quizData.length) {
+        resultContainer.innerHTML = `
+          🎉 Complimenti! Hai scoperto la località misteriosa: <strong>Colmar</strong> 🇫🇷
+          <br><br>
+          <button class="restart-btn" onclick="restartQuiz()">Ricomincia</button>
+        `;
+      } else {
+        resultContainer.innerHTML = `
+          Hai indovinato ${correctAnswers} su ${quizData.length}. Riprova per scoprire la località!
+          <br><br>
+          <button class="restart-btn" onclick="restartQuiz()">Ricomincia</button>
+        `;
+      }
+    }
+
+    function restartQuiz() {
+      currentQuestion = 0;
+      correctAnswers = 0;
+      loadQuestion();
+    }
+
+    loadQuestion();
+  </script>
+</body>
+</html>
